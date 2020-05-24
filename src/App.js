@@ -11,7 +11,7 @@ import Particles from "react-particles-js";
 import './App.css';
 
 const clarifaiApp = new Clarifai.App({
-    apiKey: 'your api key of clairifai'
+    apiKey: '262858b942184219a0b265ad0ac2d1b5'
 });
 
 const particlesOptions = {
@@ -67,18 +67,25 @@ class App extends Component {
         this.setState({box: box})
     }
 
-    onInputChange = (event) => {
-        this.setState({input: event.target.value})
-    }
+    onInputChange = event => {
+        this.setState({
+            input: event.target.value
+        });
+    };
 
     onButtonSubmit = () =>{
         this.setState({imageUrl: this.state.input});
-        clarifaiApp.models.predict(
+        setTimeout(() => {
+            console.log(this.state.input)
+            clarifaiApp.models.predict(
                 Clarifai.FACE_DETECT_MODEL,
                 this.state.input)
-            .then(response =>this.displayFaceBox(this.calculateFaceLocation(response)))
-            .catch(err => console.error(err));
+                .then(response =>this.displayFaceBox(this.calculateFaceLocation(response)))
+                .catch(err => console.error(err));
+        }, 2000)
+
     }
+
 
     onRouteChange = (route) => {
         if(route === 'signout'){
@@ -90,7 +97,7 @@ class App extends Component {
     }
 
     render() {
-       const  {isSignedIn, imageUrl, route, box} = this.state;
+        const  {isSignedIn, imageUrl, route, box} = this.state;
         return (
             <div className="App">
                 <Particles
@@ -111,8 +118,8 @@ class App extends Component {
                     </div>
                     : (
                         route === 'signin'
-                        ? <SignIn onRouteChange={this.onRouteChange}/>
-                        : <Register onRouteChange={this.onRouteChange}/>
+                            ? <SignIn onRouteChange={this.onRouteChange}/>
+                            : <Register onRouteChange={this.onRouteChange}/>
                     )
                 }
             </div>
